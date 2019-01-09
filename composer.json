@@ -1,10 +1,7 @@
 {
-    "name": "keithbrink/segment-spark",
-    "description": "This package adds Segment tracking events to Laravel Spark, including eCommerce events.",
+    "name": "keithbrink/affiliates-spark",
+    "description": "An affiliates package for Laravel Spark that allows you to track referrals from affiliates and pay commission",
     "type": "library",
-    "require": {
-        "segmentio/analytics-php": "1.*"
-    },
     "license": "MIT",
     "authors": [
         {
@@ -14,14 +11,14 @@
     ],
     "autoload": {
         "psr-4": {
-            "Keithbrink\\SegmentSpark\\": "src/"
+            "KeithBrink\\AffiliatesSpark\\": "src/"
         }
     },
     "minimum-stability": "stable",
     "extra": {
         "laravel": {
             "providers": [
-                "Keithbrink\\SegmentSpark\\SegmentSparkServiceProvider"
+                "KeithBrink\\AffiliatesSpark\\AffiliatesSparkServiceProvider"
             ]
         }
     }

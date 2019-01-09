@@ -1,0 +1,28 @@
+{
+    "name": "keithbrink/segment-spark",
+    "description": "This package adds Segment tracking events to Laravel Spark, including eCommerce events.",
+    "type": "library",
+    "require": {
+        "segmentio/analytics-php": "1.*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Keith Brink",
+            "email": "keith.brink@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Keithbrink\\SegmentSpark\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Keithbrink\\SegmentSpark\\SegmentSparkServiceProvider"
+            ]
+        }
+    }
+}

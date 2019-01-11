@@ -4,6 +4,7 @@ namespace KeithBrink\AffiliatesSpark\Http\Controllers;
 
 use KeithBrink\AffiliatesSpark\Models\Affiliate;
 use App\Http\Controllers\Controller;
+use Laravel\Spark\Spark;
 
 class KioskAffiliatesController extends Controller
 {
@@ -13,13 +14,12 @@ class KioskAffiliatesController extends Controller
         $affiliates = [];
         foreach ($affiliates_query as $affiliate) {
             $affiliates[] = [
+                'id' => $affiliate->id,
                 'name' => $affiliate->user->name,
                 'plans' => $affiliate->planCounts(),
             ];
         }
 
-        return view('affiliates-spark::kiosk.affiliates', [
-            'affiliates' => $affiliates,
-        ]);
+        return response()->json($affiliates);
     }
 }

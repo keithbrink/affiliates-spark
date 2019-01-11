@@ -16,13 +16,12 @@ class AffiliatesSparkServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../config/affiliates-spark.php' => config_path('affiliates-spark.php'),
-        ]);
+        ], 'config');
 
-        /*
         $this->publishes([
-            __DIR__.'/../resources/assets/js/segment-spark.js' => resource_path('assets/js/segment-spark.js'),
-        ], 'resources');
-        */
+            __DIR__.'/resources/js' => resource_path('js/affiliates-spark'),
+        ], 'javascript');
+
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         $this->loadRoutesFrom(__DIR__.'/../routes.php');

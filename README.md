@@ -53,6 +53,10 @@ class User extends SparkUser {
 @include('affiliates-spark::nav.affiliate-menu-item-kiosk')
 ```
 
+4. Publish the package javascript with the command: `php artisan vendor:publish --provider="KeithBrink\AffiliatesSpark\AffiliatesSparkServiceProvider" --tag=javascript`. Then, in your `/resources/js/app.js`, require the pacakge javascript: `require('./affiliates-spark/bootstrap');`.
+
+Remember to compile the assets with `npm run dev`.
+
 ## Usage
 
 TODO

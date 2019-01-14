@@ -16,4 +16,20 @@ trait Affiliate {
         }
         return false;
     }
+
+    public function planName()
+    {
+        if ($this->subscribed()) {
+            $subscriptions = $this->subscriptions()->get();
+            $plan = '';
+            foreach ($subscriptions as $subscription) {
+                if (is_null($subscription->ends_at)) {
+                    return $subscription->stripe_plan;
+                } elseif (Carbon::now()->lt(Carbon::parse($subscription->ends_at))) {
+                    return $subscription->stripe_plan;
+                }
+            }
+        }
+        return 'free';
+    }
 }

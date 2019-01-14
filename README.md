@@ -16,17 +16,6 @@ On Laravel 5.5+, the `KeithBrink\AffiliatesSpark\AffiliatesSparkServiceProvider`
 
 ## Configuration
 
-///
-To get started, you'll need to publish all vendor assets:
-
-```bash
-$ php artisan vendor:publish keithbrink/affiliates-spark
-```
-
-The vendor assets included in the package are:
-- Views: /resources/views/vendor/affiliates-spark
-///
-
 1. In your User model, add the Affiliate trait:
 
 ```
@@ -38,7 +27,14 @@ class User extends SparkUser {
 }
 ```
 
-2. Add a link for affiliates in the menu dropdown. Edit your `\resources\views\vendor\spark\nav\user.blade.php`, and under the Developer menu item (line 65), add the following code:
+2. In your SparkServiceProvider, add the following functions to handle adding affiliate IDs to the database:
+
+```
+Spark::createUsersWith('KeithBrink\AffiliatesSpark\Interactions\SaveAffiliateOnRegistration@createUser');
+Spark::createTeamsWith('KeithBrink\AffiliatesSpark\Interactions\SaveAffiliateOnRegistration@createTeam');
+```
+
+3. Add a link for affiliates in the menu dropdown. Edit `\resources\views\vendor\spark\nav\user.blade.php`, and under the Developer menu item (line 65), add the following code:
 
 ```
 @if (Auth::user()->isAffiliate())
@@ -46,16 +42,20 @@ class User extends SparkUser {
 @endif
 ```
 
-3. Add a link for managing affiliates in the Kiosk menu. Edit your `\resources\views\vendor\spark\kiosk.blade.php`, and under the Metrics Link item (line 30), add the following code:
+4. Add a link for managing affiliates in the Kiosk menu. Edit your `\resources\views\vendor\spark\kiosk.blade.php`, and under the Metrics Link item (line 30), add the following code:
 
 ```
 <!-- Affiliates Link -->
 @include('affiliates-spark::nav.affiliate-menu-item-kiosk')
 ```
 
-4. Publish the package javascript with the command: `php artisan vendor:publish --provider="KeithBrink\AffiliatesSpark\AffiliatesSparkServiceProvider" --tag=javascript`. Then, in your `/resources/js/app.js`, require the pacakge javascript: `require('./affiliates-spark/bootstrap');`.
+5. Publish the package javascript with the command: `php artisan vendor:publish --provider="KeithBrink\AffiliatesSpark\AffiliatesSparkServiceProvider" --tag=javascript`. Then, in your `/resources/js/app.js`, require the package javascript: `require('./affiliates-spark/bootstrap');`.
 
 Remember to compile the assets with `npm run dev`.
+
+6. Publish the package views with the command: `php artisan vendor:publish --provider="KeithBrink\AffiliatesSpark\AffiliatesSparkServiceProvider" --tag=views`. You should enter instructions for your affiliates in `/resources/views/vendor/affiliates-spark/affiliates/instructions.blade.php`.
+
+7. On any page that you would like to credit affiliates for sending people to, add the script: `<script async="" src="/a-s/aff.js"></script>`
 
 ## Usage
 

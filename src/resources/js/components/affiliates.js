@@ -21,5 +21,11 @@ Vue.component('affiliates-spark-kiosk-affiliates', {
                     this.affiliates = response.data;
                 });
         },
+        openAddAffiliateModal() {
+            $('#modal-add-affiliate').modal('show');
+        },
+        openAddAffiliatePlanModal() {
+            $('#modal-add-affiliate-plan').modal('show');
+        },
     }
 });

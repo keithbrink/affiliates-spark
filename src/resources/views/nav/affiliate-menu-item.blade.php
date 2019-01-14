@@ -1,10 +1,7 @@
-<li class="dropdown-header">Affiliates</li>
+<h6 class="dropdown-header">Affiliates</h6>
 
-<!-- Kiosk -->
-<li>
-    <a href="/affiliates">
-        <i class="fa fa-fw fa-btn fa-users"></i>Dashboard
-    </a>
-</li>
+<a class="dropdown-item" href="/affiliates">
+    <i class="fa fa-fw fa-btn fa-users"></i>Dashboard
+</a>
 
-<li class="divider"></li>
+<div class="dropdown-divider"></div>

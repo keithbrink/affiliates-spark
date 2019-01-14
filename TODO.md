@@ -1,10 +1,13 @@
-- Tests
--- Add a new affiliate
---- Create coupon in Stripe for affiliate
--- Add a new affiliate plan
+# Now
+- Add registration logic
 
+# Backlog
+- Searchable users, not enter email
 - Add flash sales with different links
+- Add level 2 credit logic
 
-
-x Import views from azlabels
-x Database created
+# Done
+x Add transactions from affiliate users 
+x Add affiliate plan logic to credit affiliates function
+x Switch User model references to dynamic Spark model
+x Create coupon in Stripe for affiliate

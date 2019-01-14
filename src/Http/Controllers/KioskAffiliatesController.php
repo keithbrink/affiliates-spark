@@ -4,11 +4,15 @@ namespace KeithBrink\AffiliatesSpark\Http\Controllers;
 
 use KeithBrink\AffiliatesSpark\Models\Affiliate;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\User;
+use KeithBrink\AffiliatesSpark\Models\AffiliatePlan;
+use KeithBrink\AffiliatesSpark\Events\AffiliateCreated;
 use Laravel\Spark\Spark;
 
 class KioskAffiliatesController extends Controller
 {
-    public function index()
+    public function getAffiliates()
     {
         $affiliates_query = Affiliate::all();
         $affiliates = [];
@@ -21,5 +25,57 @@ class KioskAffiliatesController extends Controller
         }
 
         return response()->json($affiliates);
+    }
+
+    public function getPlans()
+    {
+        $affilate_plans = AffiliatePlan::all();
+
+        return response()->json($affilate_plans->toArray());
+    }
+
+    public function getAddAffiliate()
+    {
+    }
+
+    public function postAddAffiliate(Request $request)
+    {
+        $request->validate([
+            'user_email' => 'required|exists:users,email',
+            'token' => 'required|unique:affiliates,token|alpha_dash',
+            'affiliate_plan_id' => 'required|exists:affiliate_plans,id',
+        ]);
+
+        $user = Spark::user()->where('email', $request->user_email)->first();
+
+        $affiliate = Affiliate::create([
+            'user_id' => $user->id,
+            'token' => $request->token,
+            'affiliate_plan_id' => $request->affiliate_plan_id,
+        ]);
+
+        event(new AffiliateCreated($affiliate));
+
+        return response(200);
+    }
+
+    public function postAddPlan(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|unique:affiliate_plans,name',
+            'months_of_commission' => 'required|integer|min:0|max:999',
+            'commission_percentage' => 'integer|min:0|max:100',
+            'commission_amount' => 'numeric|min:0',
+            'months_of_discount' => 'integer|min:0|max:999',
+            'discount_percentage' => 'integer|min:0|max:100',
+            'discount_amount' => 'numeric|min:0',
+            'level_2_months_of_commission' => 'integer|min:0|max:999',
+            'level_2_commission_percentage' => 'integer|min:0|max:100',
+            'level_2_commission_amount' => 'numeric|min:0',
+        ]);
+        
+        $affiliate_plan = AffiliatePlan::create($request->except(['busy', 'errors', 'successful']));
+
+        return response(200);
     }
 }

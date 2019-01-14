@@ -8,9 +8,16 @@ use Carbon\Carbon;
 
 class Affiliate extends Model
 {
+    protected $guarded = [];
+    
     public function user()
     {
         return $this->belongsTo(Spark::userModel());
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo('\KeithBrink\AffiliatesSpark\Models\AffiliatePlan', 'affiliate_plan_id');
     }
 
     public function transactions()
@@ -55,14 +62,29 @@ class Affiliate extends Model
             ->sum('quantity') * ($plan->price * (1 - $this->discountPercentage()));
     }
 
+    public function calculateCommission($amount)
+    {
+        return ($amount * $this->commissionPercentage()) + $this->commissionAmount();
+    }
+
     public function commissionPercentage()
     {
-        return 0.33;
+        return ($this->plan->commission_percentage/100);
+    }
+
+    public function commissionAmount()
+    {
+        return $this->plan->commission_amount;
     }
 
     public function discountPercentage()
     {
-        return 0.40;
+        return ($this->plan->discount_percentage/100);
+    }
+
+    public function discountAmount()
+    {
+        return $this->plan->discount_amount;
     }
 
     public function monthlyRecurring()

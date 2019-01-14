@@ -5,9 +5,12 @@ namespace KeithBrink\AffiliatesSpark\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use KeithBrink\AffiliatesSpark\Models\Affiliate;
-use App\Mail\AffiliateWithdrawalRequest;
+use KeithBrink\AffiliatesSpark\Mail\AffiliateWithdrawalRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Spark\Spark;
+use Illuminate\Support\Facades\Mail;
+use App\User;
 
 class AffiliateController extends Controller
 {
@@ -58,7 +61,15 @@ class AffiliateController extends Controller
             ]);
         }
 
-        Mail::to(User::find(1))->queue(new AffiliateWithdrawalRequest(Auth::user()->email, $request->input('amount'), $request->input('paypalEmail')));
+        $user->
+
+        $send_email_to_user = Spark::user()->where('email', Spark::$developers[0])->first();
+
+        Mail::to($send_email_to_user)->queue(new AffiliateWithdrawalRequest(
+            Auth::user()->email, 
+            $request->input('amount'), 
+            $request->input('paypalEmail')
+        ));
 
         return redirect('/affiliates/withdraw')->with([
             'withdrawal_message' => 'Your withdrawal request has been received and will be processed within 2 business days.',
@@ -150,5 +161,11 @@ class AffiliateController extends Controller
         } else {
             return response('No cookie set.');
         }
+    }
+
+    public function getJavascript()
+    {
+        $javascript = view('affiliates-spark::public-javascript.affiliates');
+        return response($javascript)->header('Content-Type', 'application/javascript');
     }
 }

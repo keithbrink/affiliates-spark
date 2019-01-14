@@ -4,9 +4,17 @@ namespace KeithBrink\AffiliatesSpark;
 
 use Laravel\Spark\LocalInvoice;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Event;
+use KeithBrink\AffiliatesSpark\Observers\LocalInvoiceObserver;
 
 class AffiliatesSparkServiceProvider extends ServiceProvider
 {
+    public $listeners = [
+        'KeithBrink\AffiliatesSpark\Events\AffiliateCreated' => [
+            'KeithBrink\AffiliatesSpark\Listeners\CreateCouponOnStripe',
+        ],
+    ];
+
     /**
      * Bootstrap the application services.
      *
@@ -22,13 +30,29 @@ class AffiliatesSparkServiceProvider extends ServiceProvider
             __DIR__.'/resources/js' => resource_path('js/affiliates-spark'),
         ], 'javascript');
 
+        $this->publishes([
+            __DIR__.'/resources/views/affiliates' => resource_path('views/vendor/affiliates-spark/affiliates'),
+        ], 'views');
+
+        $this->publishes([
+            __DIR__.'/resources/views/affiliates/emails' => resource_path('views/vendor/affiliates-spark/emails'),
+        ], 'views');
+
+        $this->publishes([
+            __DIR__.'/resources/views/affiliates/kiosk' => resource_path('views/vendor/affiliates-spark/kiosk'),
+        ], 'views');
+
+        $this->publishes([
+            __DIR__.'/resources/views/affiliates/nav' => resource_path('views/vendor/affiliates-spark/nav'),
+        ], 'views');
+
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         $this->loadRoutesFrom(__DIR__.'/../routes.php');
 
-        $this->loadViewsFrom(__DIR__.'/resources/views', 'affiliates-spark');
+        $this->loadViewsFrom(__DIR__.'/resources/views', 'affiliates-spark');        
 
-        LocalInvoice::observe(LocalInvoiceObserver::class);
+        $this->registerEventListeners();
     }
 
     /**
@@ -39,5 +63,16 @@ class AffiliatesSparkServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app['router']->aliasMiddleware('affiliates-spark-affiliate', \KeithBrink\AffiliatesSpark\Http\Middleware\Affiliate::class);
+    }
+
+    public function registerEventListeners()
+    {
+        LocalInvoice::observe(LocalInvoiceObserver::class);
+
+        foreach($this->listeners as $event => $listeners) {
+            foreach($listeners as $listener) {
+                Event::listen($event, $listener);
+            }
+        }        
     }
 }

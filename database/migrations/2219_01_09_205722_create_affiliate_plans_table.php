@@ -20,6 +20,9 @@ class CreateAffiliatePlansTable extends Migration
             $table->integer('months_of_commission')->default(0);
             $table->integer('commission_percentage')->default(0);
             $table->decimal('commission_amount')->default(0);
+            $table->decimal('months_of_discount')->default(0);
+            $table->decimal('discount_percentage')->default(0);
+            $table->decimal('discount_amount')->default(0);
             $table->integer('level_2_months_of_commission')->default(0);
             $table->integer('level_2_commission_percentage')->default(0);
             $table->decimal('level_2_commission_amount')->default(0);

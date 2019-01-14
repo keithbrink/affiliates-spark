@@ -1,9 +1,9 @@
 <?php
 
-namespace KeithBrink\SegmentSpark\Observers;
+namespace KeithBrink\AffiliatesSpark\Observers;
 
 use Laravel\Spark\LocalInvoice;
-use KeithBrink\AffiliatesSpark\Listeners\CreditAffiliateFromInvoice;
+use KeithBrink\AffiliatesSpark\Interactions\CreditAffiliateFromInvoice;
 
 class LocalInvoiceObserver
 {

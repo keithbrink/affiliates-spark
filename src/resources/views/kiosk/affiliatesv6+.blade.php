@@ -7,14 +7,17 @@
                         <h2 class="card-title mb-0">{{__('Affiliates')}}</h2>
                     </div>
                     <div class="col-md-6 text-right">
-                        <button type="button" class="btn btn-primary">
+                        <button type="button" class="btn btn-primary" @click="openAddAffiliatePlanModal">
+                            Add Affiliate Plan
+                        </button>
+                        <button type="button" class="btn btn-primary" @click="openAddAffiliateModal">
                             Add Affiliate
                         </button>
                     </div>
                 </div>
             </div>
             <div class="card-body">
-                <div class="row" v-for="affiliate in affiliates" v-key="affiliate.id">
+                <div class="row" v-for="affiliate in affiliates">
                     <div class="col-md-12">
                         <div class="card card-default">
                             <div class="card-header">@{{ affiliate.name }} - Subscribers</div>
@@ -49,5 +52,7 @@
                 </div>
             </div>
         </div>
+        @include('affiliates-spark::kiosk.add-affiliate-modal')
+        @include('affiliates-spark::kiosk.add-affiliate-plan-modal')
     </div>
 </affiliates-spark-kiosk-affiliates>

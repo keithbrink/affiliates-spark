@@ -6,6 +6,7 @@ use Laravel\Spark\LocalInvoice;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use KeithBrink\AffiliatesSpark\Observers\LocalInvoiceObserver;
+use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 
 class AffiliatesSparkServiceProvider extends ServiceProvider
 {
@@ -63,6 +64,8 @@ class AffiliatesSparkServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app['router']->aliasMiddleware('affiliates-spark-affiliate', \KeithBrink\AffiliatesSpark\Http\Middleware\Affiliate::class);
+
+        $this->registerEloquentFactoriesFrom(__DIR__.'/../database/factories');
     }
 
     public function registerEventListeners()
@@ -74,5 +77,16 @@ class AffiliatesSparkServiceProvider extends ServiceProvider
                 Event::listen($event, $listener);
             }
         }        
+    }
+
+    /**
+     * Register factories.
+     *
+     * @param  string  $path
+     * @return void
+     */
+    protected function registerEloquentFactoriesFrom($path)
+    {
+        $this->app->make(EloquentFactory::class)->load($path);
     }
 }

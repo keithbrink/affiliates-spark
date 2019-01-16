@@ -17,7 +17,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
 if(getUrlParameter('ref')) {
     affiliate_token = getUrlParameter('ref');
     $('<img />', {
-        src: '{{url('/s')}}/'+affiliate_token,
+        src: '{{url('/a-s/s')}}/'+affiliate_token,
         style: 'display: none;',
     }).appendTo($('#mainNav'));
 }

@@ -8,7 +8,7 @@ This version requires [PHP](https://php.net) 7, and supports Laravel 5.5+ and Sp
 
 To get the latest version, simply require the project using [Composer](https://getcomposer.org):
 
-```bash
+```
 $ composer require keithbrink/affiliates-spark
 ```
 
@@ -18,7 +18,7 @@ On Laravel 5.5+, the `KeithBrink\AffiliatesSpark\AffiliatesSparkServiceProvider`
 
 1. In your User model, add the Affiliate trait:
 
-```
+```php
 use KeithBrink\AffiliatesSpark\Traits\Affiliate as AffiliateTrait;
 
 class User extends SparkUser {
@@ -29,14 +29,14 @@ class User extends SparkUser {
 
 2. In your SparkServiceProvider, add the following functions to handle adding affiliate IDs to the database:
 
-```
+```php
 Spark::createUsersWith('KeithBrink\AffiliatesSpark\Interactions\SaveAffiliateOnRegistration@createUser');
 Spark::createTeamsWith('KeithBrink\AffiliatesSpark\Interactions\SaveAffiliateOnRegistration@createTeam');
 ```
 
 or, if you want to add extra data to your user registration, use the interaction directly:
 
-```
+```php
 use KeithBrink\AffiliatesSpark\Interactions\SaveAffiliateOnRegistration;
 ...
 Spark::createUsersWith(function ($request) {
@@ -45,13 +45,13 @@ Spark::createUsersWith(function ($request) {
     ];
 
     $interaction = new SaveAffiliateOnRegistration;
-    $interaction->createUser($request, $extra_data);
+    return $interaction->createUser($request, $extra_data);
 });
 ```
 
 3. Add a link for affiliates in the menu dropdown. Edit `\resources\views\vendor\spark\nav\user.blade.php`, and under the Developer menu item (line 65), add the following code:
 
-```
+```php
 @if (Auth::user()->isAffiliate())
     @include('affiliates-spark::nav.affiliate-menu-item')
 @endif
@@ -59,7 +59,7 @@ Spark::createUsersWith(function ($request) {
 
 4. Add a link for managing affiliates in the Kiosk menu. Edit your `\resources\views\vendor\spark\kiosk.blade.php`, and under the Metrics Link item (line 30), add the following code:
 
-```
+```php
 <!-- Affiliates Link -->
 @include('affiliates-spark::nav.affiliate-menu-item-kiosk')
 ```

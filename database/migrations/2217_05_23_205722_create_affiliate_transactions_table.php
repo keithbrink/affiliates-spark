@@ -17,7 +17,7 @@ class CreateAffiliateTransactionsTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->integer('affiliate_id');
-            $table->string('transaction_id');
+            $table->integer('invoice_id');
             $table->datetime('transaction_date');
             $table->string('type');
             $table->decimal('amount');

@@ -32,7 +32,7 @@ class CreditAffiliateFromInvoice
         $transaction = new AffiliateTransaction;
         $transaction->affiliate_id = $affiliate_id;
         $transaction->transaction_date = $this->invoice->created_at;
-        $transaction->transaction_id = $this->invoice->id;
+        $transaction->invoice_id = $this->invoice->id;
         $transaction->type = 'referral_payment';
         $transaction->amount = round($affiliate->calculateCommission($this->invoice->total), 1);
         $transaction->save();

@@ -1,9 +1,8 @@
 <?php
 
 Route::group(['prefix' => '/a-s', 'middleware' => ['web']], function () {
-    Route::get('/p/{affiliate_token}', '\KeithBrink\AffiliatesSpark\Http\Controllers\AffiliateController@link');
     Route::get('/s/{affiliate_token}', '\KeithBrink\AffiliatesSpark\Http\Controllers\AffiliateController@setCookie');
-    Route::get('/p-s', '\KeithBrink\AffiliatesSpark\Http\Controllers\AffiliateController@showCookie');
+    Route::get('/p-s', '\KeithBrink\AffiliatesSpark\Http\Controllers\AffiliateController@showCookie'); // For testing purposes only
     Route::get('/aff.js', '\KeithBrink\AffiliatesSpark\Http\Controllers\AffiliateController@getJavascript');
 });
 

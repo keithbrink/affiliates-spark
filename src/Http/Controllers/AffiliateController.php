@@ -74,67 +74,6 @@ class AffiliateController extends Controller
         ]);
     }
 
-    public function link($affiliate_token, Request $request)
-    {
-        $user_id = Auth::check() ? Auth::user()->id : str_random(40);
-        Segment::page([
-            "userId" => $user_id,
-            "name" => "affiliate Redirect",
-            "properties" => [
-                "url" => "https://dashboard.azlabels.com/p/" . $affiliate_token,
-            ],
-            "context" => [
-                "campaign" => [
-                    "name" => $affiliate_token,
-                    "source" => "affiliate",
-                    "medium" => "referral",
-                ],
-            ],
-            "integrations" => [
-                "Google Analytics" => false,
-            ],
-        ]);
-        if (strpos($affiliate_token, 'RF-') !== false) {
-            $referral_url = 'http://azlabels.com';
-        } else {
-            switch ($affiliate_token) {
-                case 'RCOSMAN_FLASH': // Flash sale
-                    if (Carbon::parse('2018-09-26')->isFuture()) { // Flash sale expires on
-                        $referral_url = 'http://azlabels.com/rcosman';
-                    } else {
-                        $affiliate_token = 'RCOSMAN'; //Post flash sale token
-                        $referral_url = 'http://azlabels.com/affiliate';
-                    }
-                    break;
-                case 'SF_FLASH_ANNUAL': // Expired flash sale
-                    $referral_url = 'http://azlabels.com/affiliate';
-                    $affiliate_token = 'SELLING_FAMILY';
-                    break;
-                case 'BW_FLASH_ANNUAL': // Expired flash sale
-                    $referral_url = 'http://azlabels.com/affiliate';
-                    $affiliate_token = 'BOBWILEY';
-                    break;
-                default:
-                    $referral_url = 'http://azlabels.com/affiliate';
-                    break;
-            }
-        }
-        $referral_url .= '?ref=' . $affiliate_token . '&utm_source=affiliate&utm_medium=referral&utm_campaign=' . $affiliate_token;
-        if (Affiliate::where('token', $affiliate_token)->count()) {
-            if ($request->cookie('affiliate')) {
-                return redirect($referral_url); // Do not set a new cookie, previous affiliateships should be honoured.
-            } else {
-                return redirect($referral_url)->cookie(
-                    'affiliate',
-                    $affiliate_token,
-                    43200
-                );
-            }
-        } else {
-            return redirect('http://azlabels.com');
-        }
-    }
-
     public function setCookie(Request $request, $affiliate_token)
     {
         if (Affiliate::where('token', $affiliate_token)->count()) {

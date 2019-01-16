@@ -10,10 +10,11 @@ use Laravel\Spark\Repositories\UserRepository;
 use Laravel\Spark\Events\Teams\TeamCreated;
 use Laravel\Spark\Repositories\TeamRepository;
 use Laravel\Spark\Contracts\Interactions\Settings\Teams\AddTeamMember as AddTeamMemberContract;
+use Illuminate\Http\Request;
 
 class SaveAffiliateOnRegistration
 {
-    public function createUser($request, $extra_data = [])
+    public function createUser(Request $request, $extra_data = [])
     {
         $data = array_merge($request->only(['name', 'email', 'password']), $extra_data);
         $data['last_read_announcements_at'] = Carbon::now();

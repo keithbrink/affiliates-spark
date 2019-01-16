@@ -17,11 +17,11 @@ class CreditAffiliateFromInvoice
 
     public function handle()
     {
-        if ($affiliate_id = $this->invoice->user->affiliate_id) {
-            $this->addTransaction($affiliate_id);
+        if ($this->invoice->user->affiliate_id) {
+            $this->addTransaction($this->invoice->user->affiliate_id);
         }
-        if($affiliate_id = $this->invoice->user->team->affiliate_id) {
-            $this->addTransaction($affiliate_id);
+        if($this->invoice->user->team && $this->invoice->user->team->affiliate_id) {
+            $this->addTransaction($this->invoice->user->team->affiliate_id);
         }
     }
 

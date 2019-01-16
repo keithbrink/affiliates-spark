@@ -61,8 +61,6 @@ class AffiliateController extends Controller
             ]);
         }
 
-        $user->
-
         $send_email_to_user = Spark::user()->where('email', Spark::$developers[0])->first();
 
         Mail::to($send_email_to_user)->queue(new AffiliateWithdrawalRequest(

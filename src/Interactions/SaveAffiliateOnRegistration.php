@@ -15,7 +15,7 @@ class SaveAffiliateOnRegistration
 {
     public function createUser($request)
     {
-        $data = array_merge($request->all(), $extra_data);
+        $data = $request->all();
         if($affiliate_id = $this->getAffiliateId($request)) {
             $data['affiliate_id'] = $affiliate_id;
         }

@@ -4,7 +4,7 @@ namespace KeithBrink\AffiliatesSpark\Listeners;
 
 use KeithBrink\AffiliatesSpark\Events\AffiliateCreated;
 use Stripe\Stripe;
-use Laravel\Spark\Coupon;
+use Stripe\Coupon;
 
 class CreateCouponOnStripe {
 

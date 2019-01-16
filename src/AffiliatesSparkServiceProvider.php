@@ -35,15 +35,15 @@ class AffiliatesSparkServiceProvider extends ServiceProvider
         ], 'views');
 
         $this->publishes([
-            __DIR__.'/resources/views/affiliates/emails' => resource_path('views/vendor/affiliates-spark/emails'),
+            __DIR__.'/resources/views/emails' => resource_path('views/vendor/affiliates-spark/emails'),
         ], 'views');
 
         $this->publishes([
-            __DIR__.'/resources/views/affiliates/kiosk' => resource_path('views/vendor/affiliates-spark/kiosk'),
+            __DIR__.'/resources/views/kiosk' => resource_path('views/vendor/affiliates-spark/kiosk'),
         ], 'views');
 
         $this->publishes([
-            __DIR__.'/resources/views/affiliates/nav' => resource_path('views/vendor/affiliates-spark/nav'),
+            __DIR__.'/resources/views/nav' => resource_path('views/vendor/affiliates-spark/nav'),
         ], 'views');
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');

@@ -64,6 +64,13 @@ Spark::createUsersWith(function ($request) {
 @include('affiliates-spark::nav.affiliate-menu-item-kiosk')
 ```
 
+and in the same file under Tab Cards, add the following code:
+
+```
+<!-- Affiliates Tab -->
+@include('affiliates-spark::nav.affiliate-tab-item-kiosk')
+```
+
 5. Publish the package javascript with the command: `php artisan vendor:publish --provider="KeithBrink\AffiliatesSpark\AffiliatesSparkServiceProvider" --tag=javascript`. Then, in your `/resources/js/app.js`, require the package javascript: `require('./affiliates-spark/bootstrap');`.
 
 Remember to compile the assets with `npm run dev`.

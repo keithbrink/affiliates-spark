@@ -29,7 +29,7 @@
                                     </thead>
 
                                     <tbody>
-                                        <tr v-for="(count, plan) in affiliate.plan">
+                                        <tr v-for="(count, plan) in affiliate.plans">
                                             <!-- Plan Name -->
                                             <td>
                                                 <div class="btn-table-align">

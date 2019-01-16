@@ -19,7 +19,7 @@ On Laravel 5.5+, the `KeithBrink\AffiliatesSpark\AffiliatesSparkServiceProvider`
 1. In your User model, add the Affiliate trait:
 
 ```
-use KeithBrink\KeithBrink\AffiliatesSpark\Traits\Affiliate as AffiliateTrait;
+use KeithBrink\AffiliatesSpark\Traits\Affiliate as AffiliateTrait;
 
 class User extends SparkUser {
     use AffiliateTrait;

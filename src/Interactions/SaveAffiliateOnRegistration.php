@@ -13,9 +13,12 @@ use Laravel\Spark\Contracts\Interactions\Settings\Teams\AddTeamMember as AddTeam
 
 class SaveAffiliateOnRegistration
 {
-    public function createUser($request)
+    public function createUser($request, $extra_data = [])
     {
-        $data = $request->all();
+        $data = array_merge($request->only(['name', 'email', 'password']), $extra_data);
+        $data['last_read_announcements_at'] = Carbon::now();
+        $data['trial_ends_at'] = Carbon::now()->addDays(Spark::trialDays());
+
         if($affiliate_id = $this->getAffiliateId($request)) {
             $data['affiliate_id'] = $affiliate_id;
         }
@@ -24,9 +27,13 @@ class SaveAffiliateOnRegistration
 
         $user->forceFill($data)->save();
 
-        Spark::interact(RedeemCoupon::class, [
-            $user, $request->cookie('affiliate')
-        ]);
+        if ($affiliate_id) {
+            $user->createAsStripeCustomer(null);
+
+            Spark::interact(RedeemCoupon::class, [
+                $user, $request->cookie('affiliate')
+            ]);
+        }
 
         return $user;
     }

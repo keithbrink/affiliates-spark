@@ -34,6 +34,21 @@ Spark::createUsersWith('KeithBrink\AffiliatesSpark\Interactions\SaveAffiliateOnR
 Spark::createTeamsWith('KeithBrink\AffiliatesSpark\Interactions\SaveAffiliateOnRegistration@createTeam');
 ```
 
+or, if you want to add extra data to your user registration, use the interaction directly:
+
+```
+use KeithBrink\AffiliatesSpark\Interactions\SaveAffiliateOnRegistration;
+...
+Spark::createUsersWith(function ($request) {
+    $extra_data = [
+        ...
+    ];
+
+    $interaction = new SaveAffiliateOnRegistration;
+    $interaction->createUser($request, $extra_data);
+});
+```
+
 3. Add a link for affiliates in the menu dropdown. Edit `\resources\views\vendor\spark\nav\user.blade.php`, and under the Developer menu item (line 65), add the following code:
 
 ```

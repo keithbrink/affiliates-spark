@@ -17,6 +17,7 @@ class SaveAffiliateOnRegistration
     public function createUser(Request $request, $extra_data = [])
     {
         $data = array_merge($request->only(['name', 'email', 'password']), $extra_data);
+        $data['password'] = bcrypt($data['password']);
         $data['last_read_announcements_at'] = Carbon::now();
         $data['trial_ends_at'] = Carbon::now()->addDays(Spark::trialDays());
 

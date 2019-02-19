@@ -65,7 +65,7 @@ class AffiliatesSparkServiceProvider extends ServiceProvider
     {
         $this->app['router']->aliasMiddleware('affiliates-spark-affiliate', \KeithBrink\AffiliatesSpark\Http\Middleware\Affiliate::class);
 
-        if(config('app.env') != 'production') {
+        if (config('app.env') != 'production') {
             $this->registerEloquentFactoriesFrom(__DIR__.'/../database/factories');
         }
     }

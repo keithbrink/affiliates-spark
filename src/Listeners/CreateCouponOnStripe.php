@@ -40,7 +40,7 @@ class CreateCouponOnStripe {
     public function setDiscount()
     {
         if($this->affiliate_plan->discount_percentage) {
-            $this->coupon['percent_off'] = $this->affiliate_plan->discount_percentage;
+            $this->coupon['percent_off'] = round($this->affiliate_plan->discount_percentage);
         } else if ($this->affiliate_plan->discount_amount) {
             $this->coupon['amount_off'] = round($this->affiliate_plan->discount_amount * 100);
         }

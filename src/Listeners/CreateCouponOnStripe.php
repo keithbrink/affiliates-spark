@@ -33,7 +33,7 @@ class CreateCouponOnStripe {
             $this->coupon['duration'] = 'once';
         } else {
             $this->coupon['duration'] = 'repeating';
-            $this->coupon['duration_in_months'] = $this->affiliate_plan->months_of_discount;
+            $this->coupon['duration_in_months'] = round($this->affiliate_plan->months_of_discount);
         }
     }
 

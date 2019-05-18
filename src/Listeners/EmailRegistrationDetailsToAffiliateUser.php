@@ -12,7 +12,7 @@ class EmailRegistrationDetailsToAffiliateUser
     { 
         Mail::to($event->user->email)->queue(new UserCreatedMail(
             $event->user->email,
-            $event->password,
+            $event->password
         ));
     }
 }

@@ -12,7 +12,7 @@ use Laravel\Spark\Spark;
 use Illuminate\Support\Facades\Mail;
 use App\User;
 
-class AffiliateController extends Controller
+class AffiliateController extends BaseController
 {
     public function index()
     {

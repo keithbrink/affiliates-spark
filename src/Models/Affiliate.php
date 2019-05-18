@@ -5,11 +5,12 @@ namespace KeithBrink\AffiliatesSpark\Models;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Spark\Spark;
 use Carbon\Carbon;
+use KeithBrink\AffiliatesSpark\Helpers\StaticOptions;
 
 class Affiliate extends Model
 {
     protected $guarded = [];
-    
+
     public function user()
     {
         return $this->belongsTo(Spark::userModel());
@@ -27,26 +28,26 @@ class Affiliate extends Model
 
     public function userReferrals()
     {
-        return $this->hasMany(Spark::userModel(), 'affiliate_id');
+        return $this->hasMany(StaticOptions::userModel(), 'affiliate_id');
     }
 
     public function teamReferrals()
     {
-        return $this->hasMany(Spark::teamModel(), 'affiliate_id');
+        return $this->hasMany(StaticOptions::teamModel(), 'affiliate_id');
     }
 
     public function recurringRevenueByInterval($interval)
     {
         $total = 0;
 
-        $plans = $interval == 'monthly' ? Spark::allMonthlyPlans() : Spark::allYearlyPlans();
+        $plans = $interval == 'monthly' ? StaticOptions::allMonthlyPlans() : StaticOptions::allYearlyPlans();
 
         foreach ($plans as $plan) {
             $total += $this->getRecurringRevenueByPlan($plan, 'subscriptions', 'userReferrals', 'user_id');
             $total += $this->getRecurringRevenueByPlan($plan, 'team_subscriptions', 'teamReferrals', 'team_id');
         }
 
-        return ($total*$this->commissionPercentage());
+        return ($total * $this->commissionPercentage());
     }
 
     public function getRecurringRevenueByPlan($plan, $table, $relationship_function, $column)
@@ -56,7 +57,7 @@ class Affiliate extends Model
             ->whereIn($column, $this->$relationship_function()->pluck('id'))
             ->where(function ($query) {
                 $query->whereNull('trial_ends_at')
-                        ->orWhere('trial_ends_at', '<=', Carbon::now());
+                    ->orWhere('trial_ends_at', '<=', Carbon::now());
             })
             ->whereNull('ends_at')
             ->sum('quantity') * ($plan->price * (1 - $this->discountPercentage()));
@@ -69,7 +70,7 @@ class Affiliate extends Model
 
     public function commissionPercentage()
     {
-        return ($this->plan->commission_percentage/100);
+        return ($this->plan->commission_percentage / 100);
     }
 
     public function commissionAmount()
@@ -79,7 +80,7 @@ class Affiliate extends Model
 
     public function discountPercentage()
     {
-        return ($this->plan->discount_percentage/100);
+        return ($this->plan->discount_percentage / 100);
     }
 
     public function discountAmount()

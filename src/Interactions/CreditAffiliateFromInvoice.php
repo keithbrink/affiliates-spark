@@ -3,14 +3,13 @@
 namespace KeithBrink\AffiliatesSpark\Interactions;
 
 use KeithBrink\AffiliatesSpark\Models\AffiliateTransaction;
-use Laravel\Spark\LocalInvoice;
 use KeithBrink\AffiliatesSpark\Models\Affiliate;
 
 class CreditAffiliateFromInvoice
 {
     public $invoice;
 
-    public function __construct(LocalInvoice $invoice)
+    public function __construct($invoice)
     {
         $this->invoice = $invoice;
     }
@@ -20,7 +19,7 @@ class CreditAffiliateFromInvoice
         if ($this->invoice->user->affiliate_id) {
             $this->addTransaction($this->invoice->user->affiliate_id);
         }
-        if($this->invoice->user->team && $this->invoice->user->team->affiliate_id) {
+        if ($this->invoice->user->team && $this->invoice->user->team->affiliate_id) {
             $this->addTransaction($this->invoice->user->team->affiliate_id);
         }
     }

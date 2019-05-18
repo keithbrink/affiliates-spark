@@ -3,14 +3,14 @@
 namespace KeithBrink\AffiliatesSpark\Http\Controllers;
 
 use KeithBrink\AffiliatesSpark\Models\Affiliate;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
 use KeithBrink\AffiliatesSpark\Models\AffiliatePlan;
 use KeithBrink\AffiliatesSpark\Events\AffiliateCreated;
-use Laravel\Spark\Spark;
+use KeithBrink\AffiliatesSpark\Helpers\StaticOptions;
+use KeithBrink\AffiliatesSpark\Events\AffiliateUserCreated;
 
-class KioskAffiliatesController extends Controller
+class KioskAffiliatesController extends BaseController
 {
     public function getAffiliates()
     {
@@ -34,19 +34,31 @@ class KioskAffiliatesController extends Controller
         return response()->json($affilate_plans->toArray());
     }
 
-    public function getAddAffiliate()
+    /**
+     * Check if there is a user with the given email address
+     */
+    public function getCheckUser(Request $request)
     {
+        if ($user = User::where('email', $request->email)->first()) {
+            return response('User found.', 200);
+        }
     }
 
     public function postAddAffiliate(Request $request)
     {
         $request->validate([
-            'user_email' => 'required|exists:users,email',
+            'user_email' => 'required',
             'token' => 'required|unique:affiliates,token|alpha_dash',
             'affiliate_plan_id' => 'required|exists:affiliate_plans,id',
         ]);
 
-        $user = Spark::user()->where('email', $request->user_email)->first();
+        if ($user = StaticOptions::user()->where('email', $request->user_email)->first()) {
+            if (Affiliate::where('user_id', $user->id)->count()) {
+                return response('User is already an affiliate.', 422);
+            }
+        } else {
+            $user = $this->createAffiliateUser($request->user_email, $request->token);
+        }
 
         $affiliate = Affiliate::create([
             'user_id' => $user->id,
@@ -73,9 +85,24 @@ class KioskAffiliatesController extends Controller
             'level_2_commission_percentage' => 'integer|min:0|max:100',
             'level_2_commission_amount' => 'numeric|min:0',
         ]);
-        
+
         $affiliate_plan = AffiliatePlan::create($request->except(['busy', 'errors', 'successful']));
 
         return response(200);
+    }
+
+    private function createAffiliateUser($email, $name)
+    {
+        $password = str_random(12);
+
+        $user = StaticOptions::createUser([
+            'name' => $name,
+            'email' => $email,
+            'password' => bcrypt($password),
+        ]);
+
+        event(new AffiliateUserCreated($user, $password));
+
+        return $user;
     }
 }

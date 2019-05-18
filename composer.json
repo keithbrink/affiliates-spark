@@ -14,6 +14,20 @@
             "KeithBrink\\AffiliatesSpark\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "KeithBrink\\AffiliatesSpark\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "laravel/cashier": "~7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~7.4.0",
+        "orchestra/testbench": "^3.5",
+        "illuminate/database": "~5",
+        "mockery/mockery": "^1.2"
+    },
     "minimum-stability": "stable",
     "extra": {
         "laravel": {

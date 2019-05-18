@@ -14,7 +14,7 @@ class StaticOptions
 {
     public static function userModel()
     {
-        if (config('app.env') != 'testing') {
+        if (class_exists(Spark::class)) {
             return Spark::userModel();
         } else {
             return User::class;
@@ -23,7 +23,7 @@ class StaticOptions
 
     public static function user()
     {
-        if (config('app.env') != 'testing') {
+        if (class_exists(Spark::class)) {
             return Spark::user();
         } else {
             return new User;
@@ -32,7 +32,7 @@ class StaticOptions
 
     public static function teamModel()
     {
-        if (config('app.env') != 'testing') {
+        if (class_exists(Spark::class)) {
             return Spark::teamModel();
         } else {
             return Team::class;
@@ -41,7 +41,7 @@ class StaticOptions
 
     public static function invoiceModel()
     {
-        if (config('app.env') != 'testing') {
+        if (class_exists(Spark::class)) {
             return new SparkLocalInvoice;
         } else {
             return new LocalInvoice;
@@ -50,7 +50,7 @@ class StaticOptions
 
     public static function allMonthlyPlans()
     {
-        if (config('app.env') != 'testing') {
+        if (class_exists(Spark::class)) {
             return Spark::allMonthlyPlans();
         } else {
             return collect([(object)[
@@ -62,7 +62,7 @@ class StaticOptions
 
     public static function allYearlyPlans()
     {
-        if (config('app.env') != 'testing') {
+        if (class_exists(Spark::class)) {
             return Spark::allYearlyPlans();
         } else {
             return collect([(object)[
@@ -74,7 +74,7 @@ class StaticOptions
 
     public static function createUser($data)
     {
-        if (config('app.env') != 'testing') {
+        if (class_exists(Spark::class)) {
             return Spark::interact(UserRepository::class . '@create', [$data]);
         } else {
             return User::create($data);

@@ -98,7 +98,7 @@ class KioskAffiliatesController extends BaseController
         $user = StaticOptions::createUser([
             'name' => $name,
             'email' => $email,
-            'password' => bcrypt($password),
+            'password' => $password,
         ]);
 
         event(new AffiliateUserCreated($user, $password));

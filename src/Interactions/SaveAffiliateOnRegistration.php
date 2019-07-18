@@ -73,11 +73,11 @@ class SaveAffiliateOnRegistration
         return $team;
     }
 
-    public function getAffiliateId($request)
+    public function getAffiliate($request)
     {
         if ($request->cookie('affiliate')) {
             if (Affiliate::where('token', $request->cookie('affiliate'))->count()) {
-                return Affiliate::where('token', $request->cookie('affiliate'))->first()->id;
+                return Affiliate::where('token', $request->cookie('affiliate'))->first();
             }
         }
     }

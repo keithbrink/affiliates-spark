@@ -21,19 +21,19 @@ class SaveAffiliateOnRegistration
         $data['last_read_announcements_at'] = Carbon::now();
         $data['trial_ends_at'] = Carbon::now()->addDays(Spark::trialDays());
 
-        if($affiliate_id = $this->getAffiliateId($request)) {
-            $data['affiliate_id'] = $affiliate_id;
+        if($affiliate = $this->getAffiliate($request)) {
+            $data['affiliate_id'] = $affiliate->id;
         }
         
         $user = Spark::user();
 
         $user->forceFill($data)->save();
 
-        if ($affiliate_id) {
+        if ($affiliate) {
             $user->createAsStripeCustomer(null);
 
             Spark::interact(RedeemCoupon::class, [
-                $user, $request->cookie('affiliate')
+                $user, $affiliate->token
             ]);
         }
 
@@ -48,8 +48,8 @@ class SaveAffiliateOnRegistration
             'trial_ends_at' => Carbon::now()->addDays(Spark::teamTrialDays()),
         ];
 
-        if($affiliate_id = $user->affiliate_id) {
-            $attributes['affiliate_id'] = $affiliate_id;
+        if($affiliate = Affiliate::find($user->affiliate_id)) {
+            $attributes['affiliate_id'] = $affiliate->id;
         }
 
         if (Spark::teamsIdentifiedByPath()) {
@@ -64,9 +64,11 @@ class SaveAffiliateOnRegistration
             $team, $user, 'owner'
         ]);
 
-        Spark::interact(RedeemCoupon::class, [
-            $team, $request->cookie('affiliate')
-        ]);
+        if ($affiliate) {
+            Spark::interact(RedeemCoupon::class, [
+                $team, $affiliate->token
+            ]);
+        }
 
         return $team;
     }

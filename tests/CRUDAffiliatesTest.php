@@ -7,7 +7,7 @@ use Mail;
 
 class CRUDAffiliatesTest extends TestCase
 {
-    public function testCreateAffiliate()
+    public function testCreateAffiliateSpecificToken()
     {
         $token = str_random(10);
 
@@ -23,6 +23,46 @@ class CRUDAffiliatesTest extends TestCase
             'token' => $token,
             'affiliate_plan_id' => $this->affiliate_plan->id,
         ]);
+    }
+
+    public function testCreateAffiliateRandomToken()
+    {
+        $response = $this->actingAs($this->admin_user)->post('/affiliates-spark/kiosk/affiliates/add', [
+            'user_email' => $this->customer_user->email,
+            'affiliate_plan_id' => $this->affiliate_plan->id,
+        ]);
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('affiliates', [
+            'user_id' => $this->customer_user->id,
+            'affiliate_plan_id' => $this->affiliate_plan->id,
+        ]);
+    }
+
+    public function testCreateAffiliateFailsSameToken()
+    {
+        $token = str_random(10);
+
+        $response = $this->actingAs($this->admin_user)->post('/affiliates-spark/kiosk/affiliates/add', [
+            'user_email' => $this->customer_user->email,
+            'token' => $token,
+            'affiliate_plan_id' => $this->affiliate_plan->id,
+        ]);
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('affiliates', [
+            'user_id' => $this->customer_user->id,
+            'token' => $token,
+            'affiliate_plan_id' => $this->affiliate_plan->id,
+        ]);
+
+        $response = $this->actingAs($this->admin_user)->post('/affiliates-spark/kiosk/affiliates/add', [
+            'user_email' => $this->customer_user->email,
+            'token' => $token,
+            'affiliate_plan_id' => $this->affiliate_plan->id,
+        ]);
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors(['token']);
     }
 
     public function testCreateAffiliateUser()

@@ -23,7 +23,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">{{__('Token')}} - The unique code for this affiliate. All capitals, no spaces.</label>
+                            <label class="col-md-4 col-form-label text-md-right">{{__('Token')}} - The unique code for this affiliate. No spaces. Leave empty to generate a random token.</label>
 
                             <div class="col-md-6">
                                 <input type="text" class="form-control" :class="{'is-invalid': addForm.errors.has('token')}" name="token" v-model="addForm.token">

@@ -5,9 +5,10 @@ namespace KeithBrink\AffiliatesSpark\Listeners;
 use KeithBrink\AffiliatesSpark\Events\AffiliateCreated;
 use Stripe\Stripe;
 use Stripe\Coupon;
+use Laravel\Cashier\Cashier;
 
-class CreateCouponOnStripe {
-
+class CreateCouponOnStripe
+{
     public $affiliate_plan;
     public $coupon = [];
 
@@ -21,15 +22,15 @@ class CreateCouponOnStripe {
         $this->setDuration();
         $this->setDiscount();
         $this->setToken();
-        
+
         Coupon::create($this->coupon);
-    }   
+    }
 
     public function setDuration()
     {
-        if($this->affiliate_plan->months_of_discount == 0) {
+        if ($this->affiliate_plan->months_of_discount == 0) {
             $this->coupon['duration'] = 'forever';
-        } else if ($this->affiliate_plan->months_of_discount == 1) {
+        } elseif ($this->affiliate_plan->months_of_discount == 1) {
             $this->coupon['duration'] = 'once';
         } else {
             $this->coupon['duration'] = 'repeating';
@@ -39,10 +40,11 @@ class CreateCouponOnStripe {
 
     public function setDiscount()
     {
-        if($this->affiliate_plan->discount_percentage) {
+        if ($this->affiliate_plan->discount_percentage) {
             $this->coupon['percent_off'] = round($this->affiliate_plan->discount_percentage);
-        } else if ($this->affiliate_plan->discount_amount) {
+        } elseif ($this->affiliate_plan->discount_amount) {
             $this->coupon['amount_off'] = round($this->affiliate_plan->discount_amount * 100);
+            $this->coupon['currency'] = Cashier::usesCurrency();
         }
     }
 

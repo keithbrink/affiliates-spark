@@ -8,6 +8,8 @@ class ControllersTest extends TestCase
 {
     public function testViewAffiliates()
     {
+        Cashier::useCurrency('usd', '$');
+
         $response = $this->actingAs($this->affiliate_user)->get('/affiliates');
         $response->assertStatus(200);
 
@@ -33,6 +35,8 @@ class ControllersTest extends TestCase
     {
         $this->addAffiliateTransaction();
 
+        Cashier::useCurrency('usd', '$');
+
         $response = $this->actingAs($this->affiliate_user)->get('/affiliates/transactions');
         $response->assertStatus(200);
 
@@ -51,6 +55,8 @@ class ControllersTest extends TestCase
     public function testViewAffiliateWithdraw()
     {
         $this->addAffiliateTransaction();
+
+        Cashier::useCurrency('usd', '$');
 
         $response = $this->actingAs($this->affiliate_user)->get('/affiliates/withdraw');
         $response->assertStatus(200);

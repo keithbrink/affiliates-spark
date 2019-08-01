@@ -1,6 +1,6 @@
 <?php
 
-namespace AffiliatesSpark\Tests;
+namespace KeithBrink\AffiliatesSpark\Tests;
 
 use Laravel\Cashier\Cashier;
 

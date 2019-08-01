@@ -1,6 +1,6 @@
 <?php
 
-namespace AffiliatesSpark\Tests;
+namespace KeithBrink\AffiliatesSpark\Tests;
 
 use KeithBrink\AffiliatesSpark\Models\Affiliate;
 use KeithBrink\AffiliatesSpark\Helpers\StaticOptions;
@@ -18,7 +18,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $this->artisan('migrate', [
             '--database' => 'testbench',
         ])->run();
-        $this->artisan('db:seed', ['--class' => 'AffiliatesSpark\Tests\Database\Seeds\DatabaseSeeder']);
+        $this->artisan('db:seed', ['--class' => 'KeithBrink\AffiliatesSpark\Tests\Database\Seeds\DatabaseSeeder']);
 
         $this->linkAllData();
     }

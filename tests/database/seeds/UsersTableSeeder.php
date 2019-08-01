@@ -1,6 +1,6 @@
 <?php
 
-namespace AffiliatesSpark\Tests\Database\Seeds;
+namespace KeithBrink\AffiliatesSpark\Tests\Database\Seeds;
 
 use Illuminate\Database\Seeder;
 

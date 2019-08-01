@@ -1,6 +1,6 @@
 <?php
 
-namespace AffiliatesSpark\Tests;
+namespace KeithBrink\AffiliatesSpark\Tests;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 

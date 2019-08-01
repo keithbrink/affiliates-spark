@@ -60,7 +60,7 @@
         <div class="card card-info">
             <div class="card-header text-center">Free Plan Users</div>
 
-            <div class="panel-body text-center">
+            <div class="card-body text-center">
                 <span style="font-size: 24px;">
                     {{$free_users}}
                 </span>

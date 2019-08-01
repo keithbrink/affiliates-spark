@@ -6,7 +6,11 @@ php:
   - 7.2
   - 7.3
 
+before_script:
+  - cp phpunit.xml.example phpunit.xml
+
 install:
   - travis_retry composer install --dev 
 
-script: vendor/bin/phpunit --verbose
+script:
+  - vendor/bin/phpunit

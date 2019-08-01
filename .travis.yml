@@ -10,7 +10,8 @@ before_script:
   - cp phpunit.xml.example phpunit.xml
 
 install:
-  - travis_retry composer install --dev 
+  - composer install
+  - composer dump-autoload
 
 script:
   - vendor/bin/phpunit

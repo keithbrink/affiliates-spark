@@ -35,7 +35,7 @@ class KioskAffiliatesController extends BaseController
     }
 
     /**
-     * Check if there is a user with the given email address
+     * Check if there is a user with the given email address.
      */
     public function getCheckUser(Request $request)
     {
@@ -46,11 +46,15 @@ class KioskAffiliatesController extends BaseController
 
     public function postAddAffiliate(Request $request)
     {
+        if (!$request->token) {
+            $request->token = str_random(12);
+        }
+
         $request->validate([
             'user_email' => 'required',
-            'token' => 'required|unique:affiliates,token|alpha_dash',
+            'token' => 'unique:affiliates,token|alpha_dash',
             'affiliate_plan_id' => 'required|exists:affiliate_plans,id',
-        ]);
+        ]);        
 
         if ($user = StaticOptions::user()->where('email', $request->user_email)->first()) {
             if (Affiliate::where('user_id', $user->id)->count()) {

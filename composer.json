@@ -16,7 +16,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "KeithBrink\\AffiliatesSpark\\Tests\\": "tests/"
+            "AffiliatesSpark\\Tests\\": "tests"
         }
     },
     "require": {

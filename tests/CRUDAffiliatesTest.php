@@ -1,6 +1,6 @@
 <?php
 
-namespace KeithBrink\AffiliatesSpark\Tests;
+namespace AffiliatesSpark\Tests;
 
 use KeithBrink\AffiliatesSpark\Mail\AffiliateUserCreated;
 use Mail;

@@ -29,7 +29,7 @@
                             </td>
                             <td>
                                 <div class="btn-table-align">
-                                    {{ $transaction->amount }}
+                                    {{ $transaction->formattedAmount() }}
                                 </div>
                             </td>
                         </tr>

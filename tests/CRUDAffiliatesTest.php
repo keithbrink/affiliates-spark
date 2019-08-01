@@ -2,7 +2,6 @@
 
 namespace KeithBrink\AffiliatesSpark\Tests;
 
-use KeithBrink\AffiliatesSpark\Tests\TestCase;
 use KeithBrink\AffiliatesSpark\Mail\AffiliateUserCreated;
 use Mail;
 
@@ -33,19 +32,19 @@ class CRUDAffiliatesTest extends TestCase
         Mail::fake();
 
         $response = $this->actingAs($this->admin_user)->post('/affiliates-spark/kiosk/affiliates/add', [
-            'user_email' => $token . '@test.com',
+            'user_email' => $token.'@test.com',
             'token' => $token,
             'affiliate_plan_id' => $this->affiliate_plan->id,
         ]);
         $response->assertStatus(200);
 
         Mail::assertQueued(AffiliateUserCreated::class, function ($mail) use ($token) {
-            return $mail->user_email === $token . '@test.com';
+            return $mail->user_email === $token.'@test.com';
         });
 
         $this->assertDatabaseHas('users', [
             'name' => $token,
-            'email' => $token . '@test.com',
+            'email' => $token.'@test.com',
         ]);
 
         $this->assertDatabaseHas('affiliates', [

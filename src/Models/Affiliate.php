@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Spark\Spark;
 use Carbon\Carbon;
 use KeithBrink\AffiliatesSpark\Helpers\StaticOptions;
+use KeithBrink\AffiliatesSpark\Formatters\Currency;
 
 class Affiliate extends Model
 {
@@ -47,7 +48,7 @@ class Affiliate extends Model
             $total += $this->getRecurringRevenueByPlan($plan, 'team_subscriptions', 'teamReferrals', 'team_id');
         }
 
-        return ($total * $this->commissionPercentage());
+        return $total * $this->commissionPercentage();
     }
 
     public function getRecurringRevenueByPlan($plan, $table, $relationship_function, $column)
@@ -65,37 +66,37 @@ class Affiliate extends Model
 
     public function calculateCommission($amount)
     {
-        return ($amount * $this->commissionPercentage()) + $this->commissionAmount();
+        return new Currency(($amount * $this->commissionPercentage()) + $this->commissionAmount()->value());
     }
 
     public function commissionPercentage()
     {
-        return ($this->plan->commission_percentage / 100);
+        return $this->plan->commission_percentage / 100;
     }
 
     public function commissionAmount()
     {
-        return $this->plan->commission_amount;
+        return new Currency($this->plan->commission_amount);
     }
 
     public function discountPercentage()
     {
-        return ($this->plan->discount_percentage / 100);
+        return $this->plan->discount_percentage / 100;
     }
 
     public function discountAmount()
     {
-        return $this->plan->discount_amount;
+        return new Currency($this->plan->discount_amount);
     }
 
     public function monthlyRecurring()
     {
-        return $this->recurringRevenueByInterval('monthly') + ($this->recurringRevenueByInterval('yearly') / 12);
+        return new Currency($this->recurringRevenueByInterval('monthly') + ($this->recurringRevenueByInterval('yearly') / 12));
     }
 
     public function yearlyRecurring()
     {
-        return $this->monthlyRecurring() * 12;
+        return new Currency($this->monthlyRecurring()->value() * 12);
     }
 
     public function referralCount()
@@ -109,10 +110,11 @@ class Affiliate extends Model
         foreach (['userReferrals', 'teamReferrals'] as $relationship_function) {
             foreach ($this->$relationship_function()->get() as $referral) {
                 if ($referral->planName() == 'free') {
-                    $count++;
+                    ++$count;
                 }
             }
         }
+
         return $count;
     }
 
@@ -122,17 +124,18 @@ class Affiliate extends Model
         foreach (['userReferrals', 'teamReferrals'] as $relationship_function) {
             foreach ($this->$relationship_function()->get() as $referral) {
                 if (array_key_exists($referral->planName(), $plans)) {
-                    $plans[$referral->planName()] += 1;
+                    ++$plans[$referral->planName()];
                 } else {
                     $plans[$referral->planName()] = 1;
                 }
             }
         }
+
         return $plans;
     }
 
     public function balance()
     {
-        return $this->transactions()->sum('amount');
+        return new Currency($this->transactions()->sum('amount'));
     }
 }

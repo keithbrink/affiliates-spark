@@ -21,7 +21,7 @@
 
             <div class="card-body text-center">
                 <div style="font-size: 24px;">
-                    ${{$monthly_recurring}}
+                    {{$monthly_recurring}}
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
 
             <div class="card-body text-center">
                 <div style="font-size: 24px;">
-                    ${{$yearly_recurring}}
+                    {{$yearly_recurring}}
                 </div>
             </div>
         </div>

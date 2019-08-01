@@ -8,13 +8,13 @@
 </div>
 <div>
     <h3>Your Affiliate Plan</h3>
-    @if($affiliate->commissionAmount() > 0)
-    <p>You receive a ${{number_format($affiliate->commissionAmount(),2)}} commission from every user you refer.</p>
+    @if($affiliate->commissionAmount()->value() > 0)
+    <p>You receive a {{$affiliate->commissionAmount()}} commission from every user you refer.</p>
     @elseif($affiliate->commissionPercentage() > 0)
     <p>You receive a {{round($affiliate->commissionPercentage()*100)}}% commission from every user you refer.</p>
     @endif
-    @if($affiliate->discountAmount() > 0)
-    <p>Users who sign up through your link receive a ${{number_format($affiliate->discountAmount(),2)}} discount.</p>
+    @if($affiliate->discountAmount()->value() > 0)
+    <p>Users who sign up through your link receive a {{$affiliate->discountAmount()}} discount.</p>
     @elseif($affiliate->discountPercentage() > 0)
     <p>Users who sign up through your link receive a {{round($affiliate->discountPercentage()*100)}}% discount.</p>
     @endif

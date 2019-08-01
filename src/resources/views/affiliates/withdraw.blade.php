@@ -11,7 +11,7 @@
                         <div class="card-header text-center">Current Balance</div>
                         <div class="card-body text-center">
                             <div style="font-size: 24px;">
-                                ${{$balance}}
+                                {{$balance}}
                             </div>
                         </div>
                     </div>
@@ -41,10 +41,10 @@
                         <label for="withdrawalAmount">Withdrawal Amount</label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1">$</span>
+                                <span class="input-group-text" id="basic-addon1">{{\Laravel\Cashier\Cashier::usesCurrencySymbol()}}</span>
                             </div>
                             <input type="number" name="amount" class="form-control" id="withdrawalAmount" placeholder="Amount" aria-describedby="basic-addon1">
-                            <small id="amountHelp" class="form-text text-muted">The minimum withdrawal amount is $10.</small>
+                            <small id="amountHelp" class="form-text text-muted">The minimum withdrawal amount is {{\Laravel\Cashier\Cashier::usesCurrencySymbol()}}10.</small>
                         </div>
                     </div>
                     

@@ -13,8 +13,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->withFactories(__DIR__ . '../database/factories');
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+        $this->withFactories(__DIR__.'../database/factories');
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
         $this->artisan('migrate', [
             '--database' => 'testbench',
         ])->run();
@@ -33,19 +33,19 @@ class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return void
+     * @param \Illuminate\Foundation\Application $app
      */
     protected function getEnvironmentSetUp($app)
     {
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
         $app['router']->aliasMiddleware('dev', VerifyUserIsDeveloper::class);
+        app('view')->addNamespace('spark', __DIR__.'/../src/resources/views/spark-stubs');
     }
 
     public function linkAllData()
@@ -67,6 +67,29 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         $affiliate_user_ids = Affiliate::all()->pluck('user_id')->toArray();
         $this->customer_user = $this->user_model->whereNotIn('id', $affiliate_user_ids)->first();
+    }
+
+    public function addAffiliateTransaction($user_id = false)
+    {
+        $this->customer_user->affiliate_id = $this->affiliate->id;
+        $this->customer_user->save();
+
+        if (!$user_id) {
+            $user_id = $this->customer_user->id;
+        }
+
+        $faker = \Faker\Factory::create();
+
+        $this->invoice = StaticOptions::invoiceModel()->create([
+            'user_id' => $user_id,
+            'provider_id' => str_random(10),
+            'total' => $faker->randomFloat(2, 5, 100),
+            'tax' => $faker->randomFloat(2, 1, 5),
+            'card_country' => $faker->countryCode,
+            'billing_state' => $faker->state,
+            'billing_zip' => $faker->postcode,
+            'billing_country' => $faker->countryCode,
+        ]);
     }
 }
 

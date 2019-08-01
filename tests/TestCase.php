@@ -14,7 +14,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         parent::setUp();
         $this->withFactories(__DIR__.'../database/factories');
-        $this->loadMigrationsFrom(__DIR__.'/Database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
         $this->artisan('migrate', [
             '--database' => 'testbench',
         ])->run();

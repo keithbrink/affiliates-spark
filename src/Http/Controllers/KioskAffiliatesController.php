@@ -9,6 +9,7 @@ use KeithBrink\AffiliatesSpark\Models\AffiliatePlan;
 use KeithBrink\AffiliatesSpark\Events\AffiliateCreated;
 use KeithBrink\AffiliatesSpark\Helpers\StaticOptions;
 use KeithBrink\AffiliatesSpark\Events\AffiliateUserCreated;
+use Illuminate\Support\Str;
 
 class KioskAffiliatesController extends BaseController
 {
@@ -97,7 +98,7 @@ class KioskAffiliatesController extends BaseController
 
     private function createAffiliateUser($email, $name)
     {
-        $password = str_random(12);
+        $password = Str::random(12);
 
         $user = StaticOptions::createUser([
             'name' => $name,

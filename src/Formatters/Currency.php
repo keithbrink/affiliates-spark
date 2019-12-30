@@ -15,7 +15,7 @@ class Currency
 
     public function __toString()
     {
-        return Cashier::usesCurrencySymbol().number_format($this->amount, 2);
+        return config('cashier.currency') . number_format($this->amount, 2);
     }
 
     public function value()

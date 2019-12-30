@@ -4,6 +4,7 @@ namespace KeithBrink\AffiliatesSpark\Http\Controllers;
 
 use KeithBrink\AffiliatesSpark\Models\Affiliate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\User;
 use KeithBrink\AffiliatesSpark\Models\AffiliatePlan;
 use KeithBrink\AffiliatesSpark\Events\AffiliateCreated;
@@ -48,7 +49,7 @@ class KioskAffiliatesController extends BaseController
     public function postAddAffiliate(Request $request)
     {
         if (!$request->token) {
-            $request->token = str_random(12);
+            $request->token = Str::random(12);
         }
 
         $request->validate([

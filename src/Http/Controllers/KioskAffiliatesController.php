@@ -49,7 +49,7 @@ class KioskAffiliatesController extends BaseController
     public function postAddAffiliate(Request $request)
     {
         if (!$request->token) {
-            $request->token = Str::random(12);
+            $request->merge(['token' => Str::random(12)]);
         }
 
         $request->validate([

@@ -14,6 +14,13 @@ class CreateCouponOnStripe
 
     public function handle(AffiliateCreated $event)
     {
+        /**
+         * Strip API requires minimum 
+         * 0.01 coupon
+         */
+        if( empty($this->coupon) )
+            return;
+        
         $this->affiliate_plan = $event->affiliate->plan;
         $this->affiliate = $event->affiliate;
 

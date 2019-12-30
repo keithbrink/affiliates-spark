@@ -10,7 +10,6 @@ use KeithBrink\AffiliatesSpark\Models\AffiliatePlan;
 use KeithBrink\AffiliatesSpark\Events\AffiliateCreated;
 use KeithBrink\AffiliatesSpark\Helpers\StaticOptions;
 use KeithBrink\AffiliatesSpark\Events\AffiliateUserCreated;
-use Illuminate\Support\Str;
 
 class KioskAffiliatesController extends BaseController
 {

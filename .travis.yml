@@ -6,6 +6,9 @@ php:
   - 7.2
   - 7.3
 
+env:
+  - APP_KEY=base64:AaXakLwCeg/2A6SssxJFp/Z7nMk5RK/IMD60x5cFf08=
+
 before_script:
   - cp phpunit.xml.example phpunit.xml
 

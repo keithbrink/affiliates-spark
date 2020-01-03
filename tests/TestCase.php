@@ -2,8 +2,9 @@
 
 namespace KeithBrink\AffiliatesSpark\Tests;
 
-use KeithBrink\AffiliatesSpark\Models\Affiliate;
+use Illuminate\Support\Str;
 use KeithBrink\AffiliatesSpark\Helpers\StaticOptions;
+use KeithBrink\AffiliatesSpark\Models\Affiliate;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -74,7 +75,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $this->customer_user->affiliate_id = $this->affiliate->id;
         $this->customer_user->save();
 
-        if (!$user_id) {
+        if (! $user_id) {
             $user_id = $this->customer_user->id;
         }
 
@@ -82,7 +83,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->invoice = StaticOptions::invoiceModel()->create([
             'user_id' => $user_id,
-            'provider_id' => str_random(10),
+            'provider_id' => Str::random(10),
             'total' => $faker->randomFloat(2, 5, 100),
             'tax' => $faker->randomFloat(2, 1, 5),
             'card_country' => $faker->countryCode,

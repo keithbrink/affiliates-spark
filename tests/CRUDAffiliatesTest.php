@@ -2,6 +2,7 @@
 
 namespace KeithBrink\AffiliatesSpark\Tests;
 
+use Illuminate\Support\Str;
 use KeithBrink\AffiliatesSpark\Mail\AffiliateUserCreated;
 use Mail;
 
@@ -9,7 +10,7 @@ class CRUDAffiliatesTest extends TestCase
 {
     public function testCreateAffiliateSpecificToken()
     {
-        $token = str_random(10);
+        $token = Str::random(10);
 
         $response = $this->actingAs($this->admin_user)->post('/affiliates-spark/kiosk/affiliates/add', [
             'user_email' => $this->customer_user->email,
@@ -41,7 +42,7 @@ class CRUDAffiliatesTest extends TestCase
 
     public function testCreateAffiliateFailsSameToken()
     {
-        $token = str_random(10);
+        $token = Str::random(10);
 
         $response = $this->actingAs($this->admin_user)->post('/affiliates-spark/kiosk/affiliates/add', [
             'user_email' => $this->customer_user->email,
@@ -67,7 +68,7 @@ class CRUDAffiliatesTest extends TestCase
 
     public function testCreateAffiliateUser()
     {
-        $token = str_random(10);
+        $token = Str::random(10);
 
         Mail::fake();
 
@@ -95,7 +96,7 @@ class CRUDAffiliatesTest extends TestCase
 
     public function testCreateAffiliatePlan()
     {
-        $name = str_random(10);
+        $name = Str::random(10);
 
         $response = $this->actingAs($this->admin_user)->post('/affiliates-spark/kiosk/affiliates/plans/add', [
             'name' => $name,

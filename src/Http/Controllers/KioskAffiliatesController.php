@@ -2,14 +2,14 @@
 
 namespace KeithBrink\AffiliatesSpark\Http\Controllers;
 
-use KeithBrink\AffiliatesSpark\Models\Affiliate;
-use Illuminate\Http\Request;
 use App\User;
-use KeithBrink\AffiliatesSpark\Models\AffiliatePlan;
-use KeithBrink\AffiliatesSpark\Events\AffiliateCreated;
-use KeithBrink\AffiliatesSpark\Helpers\StaticOptions;
-use KeithBrink\AffiliatesSpark\Events\AffiliateUserCreated;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use KeithBrink\AffiliatesSpark\Events\AffiliateCreated;
+use KeithBrink\AffiliatesSpark\Events\AffiliateUserCreated;
+use KeithBrink\AffiliatesSpark\Helpers\StaticOptions;
+use KeithBrink\AffiliatesSpark\Models\Affiliate;
+use KeithBrink\AffiliatesSpark\Models\AffiliatePlan;
 
 class KioskAffiliatesController extends BaseController
 {
@@ -47,15 +47,15 @@ class KioskAffiliatesController extends BaseController
 
     public function postAddAffiliate(Request $request)
     {
-        if (!$request->token) {
-            $request->token = str_random(12);
+        if (! $request->token) {
+            $request->token = Str::random(12);
         }
 
         $request->validate([
             'user_email' => 'required',
             'token' => 'unique:affiliates,token|alpha_dash',
             'affiliate_plan_id' => 'required|exists:affiliate_plans,id',
-        ]);        
+        ]);
 
         if ($user = StaticOptions::user()->where('email', $request->user_email)->first()) {
             if (Affiliate::where('user_id', $user->id)->count()) {

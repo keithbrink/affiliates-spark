@@ -2,15 +2,13 @@
 
 namespace KeithBrink\AffiliatesSpark\Interactions;
 
-use Laravel\Spark\Spark;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use KeithBrink\AffiliatesSpark\Models\Affiliate;
 use Laravel\Spark\Contracts\Interactions\Settings\PaymentMethod\RedeemCoupon;
-use Laravel\Spark\Repositories\UserRepository;
-use Laravel\Spark\Events\Teams\TeamCreated;
-use Laravel\Spark\Repositories\TeamRepository;
 use Laravel\Spark\Contracts\Interactions\Settings\Teams\AddTeamMember as AddTeamMemberContract;
-use Illuminate\Http\Request;
+use Laravel\Spark\Events\Teams\TeamCreated;
+use Laravel\Spark\Spark;
 
 class SaveAffiliateOnRegistration
 {
@@ -19,21 +17,24 @@ class SaveAffiliateOnRegistration
         $data = array_merge($request->only(['name', 'email', 'password']), $extra_data);
         $data['password'] = bcrypt($data['password']);
         $data['last_read_announcements_at'] = Carbon::now();
-        $data['trial_ends_at'] = Carbon::now()->addDays(Spark::trialDays());
+        $is_user_billing = (bool) count(Spark::plans());
+        if ($is_user_billing) {
+            $data['trial_ends_at'] = Carbon::now()->addDays(Spark::trialDays());
+        }
 
-        if($affiliate = $this->getAffiliate($request)) {
+        if ($affiliate = $this->getAffiliate($request)) {
             $data['affiliate_id'] = $affiliate->id;
         }
-        
+
         $user = Spark::user();
 
         $user->forceFill($data)->save();
 
-        if ($affiliate) {
+        if ($is_user_billing && $affiliate) {
             $user->createAsStripeCustomer(null);
 
             Spark::interact(RedeemCoupon::class, [
-                $user, $affiliate->token
+                $user, $affiliate->token,
             ]);
         }
 
@@ -44,11 +45,15 @@ class SaveAffiliateOnRegistration
     {
         $attributes = [
             'owner_id' => $user->id,
-            'name' => $data['name'],
-            'trial_ends_at' => Carbon::now()->addDays(Spark::teamTrialDays()),
+            'name' => $data['name'],            
         ];
 
-        if($affiliate = Affiliate::find($user->affiliate_id)) {
+        $is_team_billing = (bool) count(Spark::teamPlans());
+        if($is_team_billing) {
+            $attributes['trial_ends_at'] = Carbon::now()->addDays(Spark::teamTrialDays()),
+        }
+
+        if ($affiliate = Affiliate::find($user->affiliate_id)) {
             $attributes['affiliate_id'] = $affiliate->id;
         }
 
@@ -61,12 +66,12 @@ class SaveAffiliateOnRegistration
         event(new TeamCreated($team));
 
         Spark::interact(AddTeamMemberContract::class, [
-            $team, $user, 'owner'
+            $team, $user, 'owner',
         ]);
 
-        if ($affiliate) {
+        if ($is_team_billing && $affiliate) {
             Spark::interact(RedeemCoupon::class, [
-                $team, $affiliate->token
+                $team, $affiliate->token,
             ]);
         }
 

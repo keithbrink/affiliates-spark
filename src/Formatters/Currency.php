@@ -10,7 +10,7 @@ class Currency
 
     public function __construct($amount)
     {
-        $this->amount = $amount;
+        $this->amount = (float) $amount;
     }
 
     public function __toString()
@@ -20,6 +20,6 @@ class Currency
 
     public function value()
     {
-        return (float) $this->amount;
+        return $this->amount;
     }
 }

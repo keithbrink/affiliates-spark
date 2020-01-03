@@ -2,11 +2,11 @@
 
 namespace KeithBrink\AffiliatesSpark\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Laravel\Spark\Spark;
 use Carbon\Carbon;
-use KeithBrink\AffiliatesSpark\Helpers\StaticOptions;
+use Illuminate\Database\Eloquent\Model;
 use KeithBrink\AffiliatesSpark\Formatters\Currency;
+use KeithBrink\AffiliatesSpark\Helpers\StaticOptions;
+use Laravel\Spark\Spark;
 
 class Affiliate extends Model
 {
@@ -89,6 +89,15 @@ class Affiliate extends Model
         return new Currency($this->plan->discount_amount);
     }
 
+    public function hasDiscount()
+    {
+        if ($this->discountPercentage() > 0 or $this->discountAmount() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function monthlyRecurring()
     {
         return new Currency($this->recurringRevenueByInterval('monthly') + ($this->recurringRevenueByInterval('yearly') / 12));
@@ -110,7 +119,7 @@ class Affiliate extends Model
         foreach (['userReferrals', 'teamReferrals'] as $relationship_function) {
             foreach ($this->$relationship_function()->get() as $referral) {
                 if ($referral->planName() == 'free') {
-                    ++$count;
+                    $count++;
                 }
             }
         }
@@ -124,7 +133,7 @@ class Affiliate extends Model
         foreach (['userReferrals', 'teamReferrals'] as $relationship_function) {
             foreach ($this->$relationship_function()->get() as $referral) {
                 if (array_key_exists($referral->planName(), $plans)) {
-                    ++$plans[$referral->planName()];
+                    $plans[$referral->planName()]++;
                 } else {
                     $plans[$referral->planName()] = 1;
                 }

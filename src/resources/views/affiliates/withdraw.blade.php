@@ -41,11 +41,10 @@
                         <label for="withdrawalAmount">Withdrawal Amount</label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1">{{\Laravel\Cashier\Cashier::usesCurrencySymbol()}}</span>
+                                <span class="input-group-text" id="basic-addon1">{{ \Symfony\Component\Intl\Currencies::getSymbol(strtoupper(config('cashier.currency')), config('cashier.currency_locale')); }}</span>
                             </div>
                             <input type="number" name="amount" class="form-control" id="withdrawalAmount" placeholder="Amount" aria-describedby="basic-addon1">
-                            <small id="amountHelp" class="form-text text-muted">The minimum withdrawal amount is {{\Laravel\Cashier\Cashier::usesCurrencySymbol()}}10.</small>
-                        </div>
+                            <small id="amountHelp" class="form-text text-muted">The minimum withdrawal amount is {{ \Symfony\Component\Intl\Currencies::getSymbol(strtoupper(config('cashier.currency')), config('cashier.currency_locale')); }}10.</small>                        </div>
                     </div>
                     
                     <div class="form-group" style="width:50%">

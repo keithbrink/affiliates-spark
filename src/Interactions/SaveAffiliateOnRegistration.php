@@ -30,7 +30,7 @@ class SaveAffiliateOnRegistration
 
         $user->forceFill($data)->save();
 
-        if ($is_user_billing && $affiliate) {
+        if ($is_user_billing && $affiliate  && $affiliate->hasDiscount()) {
             $user->createAsStripeCustomer(null);
 
             Spark::interact(RedeemCoupon::class, [
@@ -69,7 +69,7 @@ class SaveAffiliateOnRegistration
             $team, $user, 'owner',
         ]);
 
-        if ($is_team_billing && $affiliate) {
+        if ($is_team_billing && $affiliate && $affiliate->hasDiscount()) {
             Spark::interact(RedeemCoupon::class, [
                 $team, $affiliate->token,
             ]);

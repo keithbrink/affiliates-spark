@@ -3,9 +3,8 @@
 namespace KeithBrink\AffiliatesSpark\Listeners;
 
 use KeithBrink\AffiliatesSpark\Events\AffiliateCreated;
-use Stripe\Stripe;
 use Stripe\Coupon;
-use Laravel\Cashier\Cashier;
+use Stripe\Stripe;
 
 class CreateCouponOnStripe
 {
@@ -17,11 +16,16 @@ class CreateCouponOnStripe
         $this->affiliate_plan = $event->affiliate->plan;
         $this->affiliate = $event->affiliate;
 
+        if ($this->affiliate->hasDiscount()) {
+            // If no discount is set, don't create a coupon
+            return;
+        }
+
         Stripe::setApiKey(config('services.stripe.secret'));
 
         $this->setDuration();
-        $this->setDiscount();
         $this->setToken();
+        $this->setDiscount();
 
         Coupon::create($this->coupon);
     }
@@ -44,7 +48,9 @@ class CreateCouponOnStripe
             $this->coupon['percent_off'] = round($this->affiliate_plan->discount_percentage);
         } elseif ($this->affiliate_plan->discount_amount) {
             $this->coupon['amount_off'] = round($this->affiliate_plan->discount_amount * 100);
-            $this->coupon['currency'] = Cashier::usesCurrency();
+            $this->coupon['currency'] = config('cashier.currency');
+        } else {
+            return false;
         }
     }
 

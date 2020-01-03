@@ -2,7 +2,7 @@
 
 namespace KeithBrink\AffiliatesSpark\Formatters;
 
-use Laravel\Cashier\Cashier;
+use Symfony\Component\Intl\Currencies;
 
 class Currency
 {
@@ -15,7 +15,7 @@ class Currency
 
     public function __toString()
     {
-        return Cashier::usesCurrencySymbol().number_format($this->amount, 2);
+        return Currencies::getSymbol(strtoupper(config('cashier.currency')), config('cashier.currency_locale'));
     }
 
     public function value()

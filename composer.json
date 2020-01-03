@@ -20,13 +20,13 @@
         }
     },
     "require": {
-        "laravel/cashier": ">=7.0"
+        "laravel/cashier": ">=10.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~7.4.0",
-        "orchestra/testbench": "^3.5",
-        "illuminate/database": "~5",
-        "mockery/mockery": "^1.2"
+        "phpunit/phpunit": ">=7.4.0",
+        "orchestra/testbench": ">=3.5",
+        "illuminate/database": ">=5",
+        "mockery/mockery": ">=1.2"
     },
     "minimum-stability": "stable",
     "extra": {

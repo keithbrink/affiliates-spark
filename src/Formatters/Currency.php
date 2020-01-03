@@ -15,7 +15,7 @@ class Currency
 
     public function __toString()
     {
-        return Cashier::formatAmount($this->amount);
+        return Cashier::formatAmount(round($this->amount * 100));
     }
 
     public function value()

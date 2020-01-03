@@ -4,15 +4,13 @@ An affiliates package for [Laravel Spark](https://spark.laravel.com/) that allow
 
 ## Installation
 
-This version requires [PHP](https://php.net) 7, and supports Laravel 5.5+ and Spark 5+.
+Cashier 10+ / Laravel 6+ is supported in the 1.* releases. To use older versions, use one of the 0.* releases.
 
 To get the latest version, simply require the project using [Composer](https://getcomposer.org):
 
 ```
 $ composer require keithbrink/affiliates-spark
 ```
-
-On Laravel 5.5+, the `KeithBrink\AffiliatesSpark\AffiliatesSparkServiceProvider` service provider and `KeithBrink\AffiliatesSpark\AffiliatesSparkFacade` facade will be automatically discovered so it will not need to be added to your config. On previous versions (untested), you will need to add those manually to your `config/app.php`.
 
 ## Configuration
 

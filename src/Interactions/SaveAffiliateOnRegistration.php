@@ -70,6 +70,8 @@ class SaveAffiliateOnRegistration
         ]);
 
         if ($is_team_billing && $affiliate && $affiliate->hasDiscount()) {
+            $team->createAsStripeCustomer(null);
+
             Spark::interact(RedeemCoupon::class, [
                 $team, $affiliate->token,
             ]);

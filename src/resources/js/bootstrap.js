@@ -5,3 +5,5 @@
 require('./components/affiliates');
 require('./components/add-affiliate');
 require('./components/add-affiliate-plan');
+
+require('./components/affiliate-discount');

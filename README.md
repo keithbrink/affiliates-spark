@@ -75,11 +75,13 @@ Remember to compile the assets with `npm run dev`.
 
 6. Publish the package views with the command: `php artisan vendor:publish --provider="KeithBrink\AffiliatesSpark\AffiliatesSparkServiceProvider" --tag=views`. You should enter instructions for your affiliates in `/resources/views/vendor/affiliates-spark/affiliates/instructions.blade.php`.
 
-7. On any page that you would like to credit affiliates for sending people to, add the script: `<script async="" src="/a-s/aff.js"></script>`
+### Optional Configuration
+
+1. If you would like your customers to see the discount they are receiving from an affiliate on the subcription page, in your `resources/views/vendor/spark/settings/subscription/subscription-notice.blade.php` file, add `@include('affiliates-spark::subscription.affiliate-discount')` after the `@else` statement (line 9).
 
 ## Usage
 
-TODO
+1. On any page that you would like to credit affiliates for sending people to, add the script: `<script async="" src="/a-s/aff.js"></script>`. You can also add the script to a different subdomain of the same top-level domain by making the src URL absolute rather than relative.
 
 ## License
 

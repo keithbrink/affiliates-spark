@@ -46,6 +46,10 @@ class AffiliatesSparkServiceProvider extends ServiceProvider
             __DIR__.'/resources/views/nav' => resource_path('views/vendor/affiliates-spark/nav'),
         ], 'views');
 
+        $this->publishes([
+            __DIR__.'/resources/views/subscription' => resource_path('views/vendor/affiliates-spark/subscription'),
+        ], 'views');
+
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         $this->loadRoutesFrom(__DIR__.'/../routes.php');

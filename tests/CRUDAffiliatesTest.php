@@ -2,9 +2,10 @@
 
 namespace KeithBrink\AffiliatesSpark\Tests;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
-use KeithBrink\AffiliatesSpark\Mail\AffiliateUserCreated;
-use Mail;
+use KeithBrink\AffiliatesSpark\Events\AffiliateCreated;
+use KeithBrink\AffiliatesSpark\Events\AffiliateUserCreated;
 
 class CRUDAffiliatesTest extends TestCase
 {
@@ -12,12 +13,18 @@ class CRUDAffiliatesTest extends TestCase
     {
         $token = Str::random(10);
 
+        Event::fake();
+
         $response = $this->actingAs($this->admin_user)->post('/affiliates-spark/kiosk/affiliates/add', [
             'user_email' => $this->customer_user->email,
             'token' => $token,
             'affiliate_plan_id' => $this->affiliate_plan->id,
         ]);
         $response->assertStatus(200);
+
+        Event::assertDispatched(AffiliateCreated::class, function ($event) use ($token) {
+            return $event->affiliate->token === $token;
+        });
 
         $this->assertDatabaseHas('affiliates', [
             'user_id' => $this->customer_user->id,
@@ -28,11 +35,17 @@ class CRUDAffiliatesTest extends TestCase
 
     public function testCreateAffiliateRandomToken()
     {
+        Event::fake();
+
         $response = $this->actingAs($this->admin_user)->post('/affiliates-spark/kiosk/affiliates/add', [
             'user_email' => $this->customer_user->email,
             'affiliate_plan_id' => $this->affiliate_plan->id,
         ]);
         $response->assertStatus(200);
+
+        Event::assertDispatched(AffiliateCreated::class, function ($event) {
+            return $event->affiliate->user_id === $this->customer_user->id;
+        });
 
         $this->assertDatabaseHas('affiliates', [
             'user_id' => $this->customer_user->id,
@@ -44,6 +57,8 @@ class CRUDAffiliatesTest extends TestCase
     {
         $token = Str::random(10);
 
+        Event::fake();
+
         $response = $this->actingAs($this->admin_user)->post('/affiliates-spark/kiosk/affiliates/add', [
             'user_email' => $this->customer_user->email,
             'token' => $token,
@@ -51,11 +66,17 @@ class CRUDAffiliatesTest extends TestCase
         ]);
         $response->assertStatus(200);
 
+        Event::assertDispatched(AffiliateCreated::class, function ($event) use ($token) {
+            return $event->affiliate->token === $token;
+        });
+
         $this->assertDatabaseHas('affiliates', [
             'user_id' => $this->customer_user->id,
             'token' => $token,
             'affiliate_plan_id' => $this->affiliate_plan->id,
         ]);
+
+        $this->withExceptionHandling();
 
         $response = $this->actingAs($this->admin_user)->post('/affiliates-spark/kiosk/affiliates/add', [
             'user_email' => $this->customer_user->email,
@@ -70,7 +91,7 @@ class CRUDAffiliatesTest extends TestCase
     {
         $token = Str::random(10);
 
-        Mail::fake();
+        Event::fake();
 
         $response = $this->actingAs($this->admin_user)->post('/affiliates-spark/kiosk/affiliates/add', [
             'user_email' => $token.'@test.com',
@@ -79,8 +100,12 @@ class CRUDAffiliatesTest extends TestCase
         ]);
         $response->assertStatus(200);
 
-        Mail::assertQueued(AffiliateUserCreated::class, function ($mail) use ($token) {
-            return $mail->user_email === $token.'@test.com';
+        Event::assertDispatched(AffiliateCreated::class, function ($event) use ($token) {
+            return $event->affiliate->token === $token;
+        });
+
+        Event::assertDispatched(AffiliateUserCreated::class, function ($event) use ($token) {
+            return $event->user->email === $token.'@test.com';
         });
 
         $this->assertDatabaseHas('users', [

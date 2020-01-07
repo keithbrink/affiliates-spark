@@ -21,7 +21,7 @@ class CreateCouponOnStripe
             return;
         }
 
-        Stripe::setApiKey(config('services.stripe.secret'));
+        Stripe::setApiKey(config('cashier.secret'));
 
         $this->setDuration();
         $this->setToken();

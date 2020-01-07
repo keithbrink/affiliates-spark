@@ -46,7 +46,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
             'database' => ':memory:',
             'prefix' => '',
         ]);
-        $app['config']->set('services.stripe.secret', env('STRIPE_SECRET'));
         $app['router']->aliasMiddleware('dev', VerifyUserIsDeveloper::class);
         app('view')->addNamespace('spark', __DIR__.'/../src/resources/views/spark-stubs');
     }

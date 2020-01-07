@@ -64,12 +64,16 @@ Spark::createUsersWith(function ($request) {
 
 and in the same file under Tab Cards, add the following code:
 
-```
+```php
 <!-- Affiliates Tab -->
 @include('affiliates-spark::nav.affiliate-tab-item-kiosk')
 ```
 
-5. Publish the package javascript with the command: `php artisan vendor:publish --provider="KeithBrink\AffiliatesSpark\AffiliatesSparkServiceProvider" --tag=javascript`. Then, in your `/resources/js/app.js`, require the package javascript: `require('./affiliates-spark/bootstrap');`.
+5. Publish the package javascript with the command: `php artisan vendor:publish --provider="KeithBrink\AffiliatesSpark\AffiliatesSparkServiceProvider" --tag=javascript`. Then, in your `/resources/js/app.js`, require the package javascript: 
+
+```js
+require('./affiliates-spark/bootstrap');
+```
 
 Remember to compile the assets with `npm run dev`.
 
@@ -77,7 +81,11 @@ Remember to compile the assets with `npm run dev`.
 
 ### Optional Configuration
 
-1. If you would like your customers to see the discount they are receiving from an affiliate on the subcription page, in your `resources/views/vendor/spark/settings/subscription/subscription-notice.blade.php` file, add `@include('affiliates-spark::subscription.affiliate-discount')` after the `@else` statement (line 9).
+1. If you would like your customers to see the discount they are receiving from an affiliate on the subcription page, in your `resources/views/vendor/spark/settings/subscription/subscription-notice.blade.php` file, after the `@else` statement (line 9), add:
+
+```php
+@include('affiliates-spark::subscription.affiliate-discount')
+```
 
 ## Usage
 

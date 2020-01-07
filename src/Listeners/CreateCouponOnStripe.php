@@ -16,7 +16,7 @@ class CreateCouponOnStripe
         $this->affiliate_plan = $event->affiliate->plan;
         $this->affiliate = $event->affiliate;
 
-        if ($this->affiliate->hasDiscount()) {
+        if (! $this->affiliate->hasDiscount()) {
             // If no discount is set, don't create a coupon
             return;
         }

@@ -91,7 +91,7 @@ class Affiliate extends Model
 
     public function hasDiscount()
     {
-        if ($this->discountPercentage() > 0 or $this->discountAmount() > 0) {
+        if ($this->discountPercentage() > 0 or $this->discountAmount()->value() > 0) {
             return true;
         }
 

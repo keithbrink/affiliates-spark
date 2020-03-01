@@ -45,12 +45,12 @@ class SaveAffiliateOnRegistration
     {
         $attributes = [
             'owner_id' => $user->id,
-            'name' => $data['name'],            
+            'name' => $data['name'],
         ];
 
         $is_team_billing = (bool) count(Spark::teamPlans());
-        if($is_team_billing) {
-            $attributes['trial_ends_at'] = Carbon::now()->addDays(Spark::teamTrialDays()),
+        if ($is_team_billing) {
+            $attributes['trial_ends_at'] = Carbon::now()->addDays(Spark::teamTrialDays());
         }
 
         if ($affiliate = Affiliate::find($user->affiliate_id)) {

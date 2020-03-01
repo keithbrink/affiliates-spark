@@ -2,15 +2,13 @@
 
 namespace KeithBrink\AffiliatesSpark\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use KeithBrink\AffiliatesSpark\Models\Affiliate;
-use KeithBrink\AffiliatesSpark\Mail\AffiliateWithdrawalRequest;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Laravel\Spark\Spark;
-use Illuminate\Support\Facades\Mail;
 use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use KeithBrink\AffiliatesSpark\Mail\AffiliateWithdrawalRequest;
+use KeithBrink\AffiliatesSpark\Models\Affiliate;
+use Laravel\Spark\Spark;
 
 class AffiliateController extends BaseController
 {
@@ -38,6 +36,7 @@ class AffiliateController extends BaseController
     public function getTransactions()
     {
         $transactions = Affiliate::where('user_id', Auth::user()->id)->first()->transactions()->orderBy('transaction_date', 'DESC')->paginate(20);
+
         return view('affiliates-spark::affiliates.transactions', [
             'transactions' => $transactions,
         ]);
@@ -56,13 +55,13 @@ class AffiliateController extends BaseController
             'amount' => 'required|integer|min:10',
             'paypalEmail' => 'required|email',
         ]);
-        if (Affiliate::where('user_id', Auth::user()->id)->first()->balance() < $request->input('amount')) {
+        if (Affiliate::where('user_id', Auth::user()->id)->first()->balance()->value() < $request->input('amount')) {
             return redirect('/affiliates/withdraw')->withErrors([
                 'amount' => 'You do not have this much available to withdraw.',
             ]);
         }
 
-        $send_email_to_user = Spark::user()->where('email', Spark::$developers[0])->first();
+        $send_email_to_user = Spark::user()->whereIn('email', Spark::$developers)->first();
 
         Mail::to($send_email_to_user)->queue(new AffiliateWithdrawalRequest(
             Auth::user()->email,
@@ -104,6 +103,7 @@ class AffiliateController extends BaseController
     public function getJavascript()
     {
         $javascript = view('affiliates-spark::public-javascript.affiliates');
+
         return response($javascript)->header('Content-Type', 'application/javascript');
     }
 }

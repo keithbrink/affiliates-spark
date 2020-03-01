@@ -5,13 +5,14 @@ namespace KeithBrink\AffiliatesSpark\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class AffiliateWithdrawalRequest extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private $user_email, $amount, $paypal_email;
+    public $user_email;
+    public $amount;
+    public $paypal_email;
 
     /**
      * Create a new message instance.

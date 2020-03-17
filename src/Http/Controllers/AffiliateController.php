@@ -2,7 +2,6 @@
 
 namespace KeithBrink\AffiliatesSpark\Http\Controllers;
 
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -61,9 +60,7 @@ class AffiliateController extends BaseController
             ]);
         }
 
-        $send_email_to_user = Spark::user()->whereIn('email', Spark::$developers)->first();
-
-        Mail::to($send_email_to_user)->queue(new AffiliateWithdrawalRequest(
+        Mail::to(Spark::supportEmail())->queue(new AffiliateWithdrawalRequest(
             Auth::user()->email,
             $request->input('amount'),
             $request->input('paypalEmail')

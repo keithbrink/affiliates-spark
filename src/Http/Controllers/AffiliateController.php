@@ -60,7 +60,7 @@ class AffiliateController extends BaseController
             ]);
         }
 
-        Mail::to(Spark::supportEmail())->queue(new AffiliateWithdrawalRequest(
+        Mail::to(Spark::supportAddress())->queue(new AffiliateWithdrawalRequest(
             Auth::user()->email,
             $request->input('amount'),
             $request->input('paypalEmail')

@@ -79,6 +79,8 @@ Remember to compile the assets with `npm run dev`.
 
 6. Publish the package views with the command: `php artisan vendor:publish --provider="KeithBrink\AffiliatesSpark\AffiliatesSparkServiceProvider" --tag=views`. You should enter instructions for your affiliates in `/resources/views/vendor/affiliates-spark/affiliates/instructions.blade.php`.
 
+7. Run the package migrations with the command: `php artisan migrate --package "keithbrink/affiliates-spark`.
+
 ### Optional Configuration
 
 1. If you would like your customers to see the discount they are receiving from an affiliate on the subcription page, in your `resources/views/vendor/spark/settings/subscription/subscription-notice.blade.php` file, after the `@else` statement (line 9), add:

@@ -54,7 +54,7 @@ class AffiliateController extends BaseController
             'amount' => 'required|integer|min:10',
             'paypalEmail' => 'required|email',
         ]);
-        if (Affiliate::where('user_id', Auth::user()->id)->first()->balance() < $request->input('amount')) {
+        if (Affiliate::where('user_id', Auth::user()->id)->first()->balance()->value() < $request->input('amount')) {
             return redirect('/affiliates/withdraw')->withErrors([
                 'amount' => 'You do not have this much available to withdraw.',
             ]);

@@ -9,7 +9,13 @@
 <div>
     <h3>Your Affiliate Plan</h3>
     @if($affiliate->commissionAmount()->value() > 0)
-    <p>You receive a {{$affiliate->commissionAmount()}} commission from every user you refer.</p>
+        <p>You receive a <br /><strong>{{$affiliate->commissionAmount()}} commission</strong>
+            @if($affiliate->commissionDuration() > 0)
+                <br />for the first <strong>{{$affiliate->commissionDuration()}} months</strong> of the subscription
+            @else
+                <br />for the <strong>lifetime</strong> of the subscription
+            @endif
+            <br />from every user you refer.</p>
     @elseif($affiliate->commissionPercentage() > 0)
     <p>You receive a<br /><strong>{{round($affiliate->commissionPercentage()*100)}}% commission</strong>
         @if($affiliate->commissionDuration() > 0)

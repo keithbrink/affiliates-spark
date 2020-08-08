@@ -11,7 +11,13 @@
     @if($affiliate->commissionAmount()->value() > 0)
     <p>You receive a {{$affiliate->commissionAmount()}} commission from every user you refer.</p>
     @elseif($affiliate->commissionPercentage() > 0)
-    <p>You receive a {{round($affiliate->commissionPercentage()*100)}}% commission from every user you refer.</p>
+    <p>You receive a<br /><strong>{{round($affiliate->commissionPercentage()*100)}}% commission</strong>
+        @if($affiliate->commissionDuration() > 0)
+            <br />for the first <strong>{{$affiliate->commissionDuration()}} months</strong> of the subscription
+            @else
+            <br />for the <strong>lifetime</strong> of the subscription
+            @endif
+        <br />from every user you refer.</p>
     @endif
     @if($affiliate->discountAmount()->value() > 0)
     <p>Users who sign up through your link receive a {{$affiliate->discountAmount()}} discount.</p>

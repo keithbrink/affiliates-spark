@@ -74,6 +74,11 @@ class Affiliate extends Model
         return $this->plan->commission_percentage / 100;
     }
 
+    public function commissionDuration()
+    {
+        return $this->plan->months_of_commission;
+    }
+
     public function commissionAmount()
     {
         return new Currency($this->plan->commission_amount);
